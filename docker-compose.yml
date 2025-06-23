@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: flowforge-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: flowforge
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - flowforge-network
+
+  # Spring Boot Backend
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: flowforge-server
+    restart: unless-stopped
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongodb
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: flowforge
+      JWT_SECRET: your-256-bit-secret-key-here
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    networks:
+      - flowforge-network
+
+  # React Frontend
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: flowforge-client
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - flowforge-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  flowforge-network:
+    driver: bridge 

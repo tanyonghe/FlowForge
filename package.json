@@ -17,7 +17,13 @@
     "test": "npm run test:server && npm run test:client",
     "test:server": "cd server && mvn test",
     "test:client": "cd client && npm test",
-    "install:all": "npm install && cd client && npm install"
+    "install:all": "npm install && cd client && npm install",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:clean": "docker-compose down -v --remove-orphans"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
