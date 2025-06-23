@@ -1,64 +1,75 @@
 # FlowForge
 
-A dynamic workflow automation engine built with Spring Boot and MongoDB.
-
-## Features
-
-- Custom workflow definition and execution
-- Role-based access control
-- RESTful API
-- MongoDB persistence
-- JWT authentication
-
-## Prerequisites
-
-- Java 17 or higher
-- MongoDB 4.4 or higher
-- Maven 3.6 or higher
-
-## Setup
-
-1. Clone the repository:
-```bash
-git clone https://github.com/tanyonghe/FlowForge.git
-cd FlowForge
-```
-
-2. Configure MongoDB:
-   - Ensure MongoDB is running on localhost:27017
-   - Create a database named 'flowforge'
-
-3. Configure application:
-   - Set JWT_SECRET environment variable (optional)
-   - Update `application.yml` if needed
-
-4. Build and run:
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-
-The application will start on `http://localhost:8080/api`
-
-## API Endpoints
-
-- `POST /api/auth/login` - Authenticate user
-- `POST /api/workflows` - Create workflow
-- `GET /api/workflows` - List workflows
-- `POST /api/workflows/{id}/execute` - Execute workflow
-- `GET /api/executions/{id}` - Get execution status
+A dynamic workflow automation engine built with Spring Boot, MongoDB, and React.
 
 ## Project Structure
 
 ```
-src/main/java/com/github/tanyonghe/flowforge/
-├── config/         # Configuration classes
-├── controller/     # REST controllers
-├── model/          # Domain models
-├── repository/     # MongoDB repositories
-├── service/        # Business logic
-└── security/       # Security configurations
+FlowForge/
+├── client/          # React frontend application
+├── server/          # Spring Boot backend application
+├── package.json     # Root package.json for monorepo
+└── README.md        # This file
 ```
+
+## Prerequisites
+
+- Java 17 or higher
+- Node.js 18 or higher
+- MongoDB 4.4 or higher
+- Maven 3.6 or higher
+
+## Quick Start
+
+1. Install dependencies:
+```bash
+npm run install:all
+```
+
+2. Start MongoDB:
+```bash
+# Ensure MongoDB is running on localhost:27017
+# Create a database named 'flowforge'
+```
+
+3. Start both client and server:
+```bash
+npm run dev
+```
+
+This will start:
+- Backend server on `http://localhost:8080/api`
+- Frontend client on `http://localhost:3000`
+
+## Development
+
+### Backend (Server)
+- Spring Boot application with MongoDB
+- RESTful API endpoints
+- JWT authentication
+- Workflow execution engine
+
+### Frontend (Client)
+- React TypeScript application
+- Modern UI for workflow management
+- Real-time workflow execution monitoring
+
+## Available Scripts
+
+- `npm run dev` - Start both client and server in development mode
+- `npm run build` - Build both client and server for production
+- `npm run test` - Run tests for both client and server
+- `npm run dev:server` - Start only the backend server
+- `npm run dev:client` - Start only the frontend client
+
+## API Endpoints
+
+- `POST /api/workflows` - Create workflow
+- `GET /api/workflows` - List workflows
+- `GET /api/workflows/{id}` - Get workflow by ID
+- `PUT /api/workflows/{id}` - Update workflow
+- `DELETE /api/workflows/{id}` - Delete workflow
+- `POST /api/workflows/{id}/execute` - Execute workflow
 
 ## Contributing
 
