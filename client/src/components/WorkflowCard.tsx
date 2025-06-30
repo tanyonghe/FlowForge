@@ -16,15 +16,15 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
   onDelete,
   onExecute
 }) => {
-  const getStepTypeCounts = () => {
+  const getTaskTypeCounts = () => {
     const counts: Record<string, number> = {};
-    workflow.steps.forEach(step => {
-      counts[step.type] = (counts[step.type] || 0) + 1;
+    workflow.tasks.forEach(task => {
+      counts[task.type] = (counts[task.type] || 0) + 1;
     });
     return counts;
   };
 
-  const stepCounts = getStepTypeCounts();
+  const taskCounts = getTaskTypeCounts();
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
@@ -39,7 +39,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
           <div className="flex items-center text-xs text-gray-500">
             <span>Created by: {workflow.createdBy}</span>
             <span className="mx-2">•</span>
-            <span>{workflow.steps.length} steps</span>
+            <span>{workflow.tasks.length} tasks</span>
           </div>
         </div>
         <div className="text-right">
@@ -49,11 +49,11 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
         </div>
       </div>
 
-      {/* Step Type Summary */}
+      {/* Task Type Summary */}
       <div className="mb-4">
-        <h4 className="text-sm font-medium text-gray-700 mb-2">Step Types:</h4>
+        <h4 className="text-sm font-medium text-gray-700 mb-2">Task Types:</h4>
         <div className="flex flex-wrap gap-2">
-          {Object.entries(stepCounts).map(([type, count]) => (
+          {Object.entries(taskCounts).map(([type, count]) => (
             <span
               key={type}
               className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"

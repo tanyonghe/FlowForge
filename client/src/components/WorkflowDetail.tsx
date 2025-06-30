@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Workflow } from '../types/workflow';
-import WorkflowStep from './WorkflowStep';
+import Task from './Task';
 import { workflowService } from '../services/workflowService';
 
 interface WorkflowDetailProps {
@@ -33,15 +33,15 @@ const WorkflowDetail: React.FC<WorkflowDetailProps> = ({
     }
   };
 
-  const getStepTypeCounts = () => {
+  const getTaskTypeCounts = () => {
     const counts: Record<string, number> = {};
-    workflow.steps.forEach(step => {
-      counts[step.type] = (counts[step.type] || 0) + 1;
+    workflow.tasks.forEach(task => {
+      counts[task.type] = (counts[task.type] || 0) + 1;
     });
     return counts;
   };
 
-  const stepCounts = getStepTypeCounts();
+  const taskCounts = getTaskTypeCounts();
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -76,8 +76,8 @@ const WorkflowDetail: React.FC<WorkflowDetailProps> = ({
             <p className="text-gray-900">{workflow.createdBy}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Total Steps</label>
-            <p className="text-gray-900">{workflow.steps.length}</p>
+            <label className="text-sm font-medium text-gray-700">Total Tasks</label>
+            <p className="text-gray-900">{workflow.tasks.length}</p>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700">Workflow ID</label>
@@ -85,11 +85,11 @@ const WorkflowDetail: React.FC<WorkflowDetailProps> = ({
           </div>
         </div>
 
-        {/* Step Type Summary */}
+        {/* Task Type Summary */}
         <div className="mt-4">
-          <label className="text-sm font-medium text-gray-700">Step Types</label>
+          <label className="text-sm font-medium text-gray-700">Task Types</label>
           <div className="flex flex-wrap gap-2 mt-1">
-            {Object.entries(stepCounts).map(([type, count]) => (
+            {Object.entries(taskCounts).map(([type, count]) => (
               <span
                 key={type}
                 className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
@@ -139,14 +139,14 @@ const WorkflowDetail: React.FC<WorkflowDetailProps> = ({
         </div>
       </div>
 
-      {/* Steps */}
+      {/* Tasks */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Workflow Steps ({workflow.steps.length})
+          Workflow Tasks ({workflow.tasks.length})
         </h2>
         <div className="space-y-4">
-          {workflow.steps.map((step, index) => (
-            <WorkflowStep key={index} step={step} index={index} />
+          {workflow.tasks.map((task, index) => (
+            <Task key={index} task={task} index={index} />
           ))}
         </div>
       </div>

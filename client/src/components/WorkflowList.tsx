@@ -58,16 +58,16 @@ const WorkflowList: React.FC<WorkflowListProps> = ({
                          workflow.createdBy.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesFilter = filterType === 'all' || 
-                         workflow.steps.some(step => step.type.toLowerCase() === filterType.toLowerCase());
+                         workflow.tasks.some(task => task.type.toLowerCase() === filterType.toLowerCase());
     
     return matchesSearch && matchesFilter;
   });
 
-  const getStepTypeOptions = () => {
+  const getTaskTypeOptions = () => {
     const types = new Set<string>();
     workflows.forEach(workflow => {
-      workflow.steps.forEach(step => {
-        types.add(step.type);
+      workflow.tasks.forEach(task => {
+        types.add(task.type);
       });
     });
     return Array.from(types).sort();
@@ -144,7 +144,7 @@ const WorkflowList: React.FC<WorkflowListProps> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Step Type
+              Filter by Task Type
             </label>
             <select
               value={filterType}
@@ -152,7 +152,7 @@ const WorkflowList: React.FC<WorkflowListProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Types</option>
-              {getStepTypeOptions().map(type => (
+              {getTaskTypeOptions().map(type => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>

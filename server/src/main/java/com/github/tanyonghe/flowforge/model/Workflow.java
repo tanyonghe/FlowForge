@@ -14,16 +14,20 @@ public class Workflow {
     private String name;
     private String description;
     private String createdBy;
-    private List<WorkflowStep> steps;
+    private List<Task> tasks;
     private Map<String, Object> metadata;
 
     @Data
-    public static class WorkflowStep {
+    public static class Task {
         private String type;
         private String name;
         private Map<String, Object> config;
-        private List<String> nextSteps;
+        private List<String> nextTasks;
         private Map<String, String> conditions;
+        private String templateId;
+        private Map<String, Object> parameters;
+        private Boolean templateBased;
+        private Map<String, Object> configOverrides;
     }
 
     public void setId(String id) {
