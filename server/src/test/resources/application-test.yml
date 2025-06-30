@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: flowforge_test
+      auto-index-creation: true
+
+  security:
+    jwt:
+      secret: testSecretKeyThatIsLongEnoughForHS256Algorithm
+      expiration: 86400000 # 24 hours in milliseconds
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    com.github.tanyonghe.flowforge: DEBUG
+    org.springframework.data.mongodb: INFO
+    org.springframework.security: INFO 
