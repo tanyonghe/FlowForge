@@ -6,6 +6,7 @@ import WorkflowDetail from './components/WorkflowDetail';
 import WorkflowForm from './components/WorkflowForm';
 import { Workflow } from './types/workflow';
 import { workflowService } from './services/workflowService';
+import { authService } from './services/authService';
 
 // Header component with navigation
 const Header: React.FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
@@ -69,10 +70,8 @@ function App() {
 
   // Check for existing auth state on app startup
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken');
-    if (authToken) {
-      setIsLoggedIn(true);
-    }
+    const loggedIn = authService.isLoggedIn();
+    setIsLoggedIn(loggedIn);
   }, []);
 
   const handleSaveWorkflow = (workflow: Workflow) => {
@@ -320,7 +319,7 @@ const HelpPage: React.FC = () => {
 // Login page component
 const LoginPage: React.FC<{ setIsLoggedIn: (loggedIn: boolean) => void }> = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -329,20 +328,12 @@ const LoginPage: React.FC<{ setIsLoggedIn: (loggedIn: boolean) => void }> = ({ s
     setLoading(true);
     setError(null);
 
-    // Simulate login - in real app, this would call your auth API
     try {
-      // For demo purposes, accept any email/password
-      if (formData.email && formData.password) {
-        // Store auth token in localStorage
-        localStorage.setItem('authToken', 'demo-token');
-        localStorage.setItem('userEmail', formData.email);
-        setIsLoggedIn(true);
-        navigate('/profile');
-      } else {
-        setError('Please enter both email and password');
-      }
+      await authService.login(formData.username, formData.password);
+      setIsLoggedIn(true);
+      navigate('/profile');
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -365,12 +356,12 @@ const LoginPage: React.FC<{ setIsLoggedIn: (loggedIn: boolean) => void }> = ({ s
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
-                type="email"
+                type="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="Username or Email"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               />
             </div>
             <div>
@@ -413,19 +404,18 @@ const LoginPage: React.FC<{ setIsLoggedIn: (loggedIn: boolean) => void }> = ({ s
 // Profile page component
 const ProfilePage: React.FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState<string>('');
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
       return;
     }
-    setUserEmail(localStorage.getItem('userEmail') || '');
+    setUserInfo(authService.getUserInfo());
   }, [isLoggedIn, navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userEmail');
+    authService.logout();
     navigate('/login');
   };
 
@@ -458,7 +448,9 @@ const ProfilePage: React.FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
           <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">User Information</h2>
             <div className="bg-gray-50 p-4 rounded-lg">
-              <p><strong>Email:</strong> {userEmail}</p>
+              <p><strong>Username:</strong> {userInfo?.username}</p>
+              <p><strong>Email:</strong> {userInfo?.email}</p>
+              <p><strong>Role:</strong> {userInfo?.role}</p>
               <p><strong>Status:</strong> <span className="text-green-600">Active</span></p>
             </div>
           </div>
