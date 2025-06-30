@@ -36,7 +36,8 @@ const WorkflowDetail: React.FC<WorkflowDetailProps> = ({
   const getTaskTypeCounts = () => {
     const counts: Record<string, number> = {};
     workflow.tasks.forEach(task => {
-      counts[task.type] = (counts[task.type] || 0) + 1;
+      const taskType = task.type || 'unknown';
+      counts[taskType] = (counts[taskType] || 0) + 1;
     });
     return counts;
   };
