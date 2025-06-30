@@ -58,7 +58,7 @@ const WorkflowList: React.FC<WorkflowListProps> = ({
                          workflow.createdBy.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesFilter = filterType === 'all' || 
-                         workflow.tasks.some(task => task.type.toLowerCase() === filterType.toLowerCase());
+                         workflow.tasks.some(task => (task.type || '').toLowerCase() === filterType.toLowerCase());
     
     return matchesSearch && matchesFilter;
   });
@@ -67,7 +67,9 @@ const WorkflowList: React.FC<WorkflowListProps> = ({
     const types = new Set<string>();
     workflows.forEach(workflow => {
       workflow.tasks.forEach(task => {
-        types.add(task.type);
+        if (task.type) {
+          types.add(task.type);
+        }
       });
     });
     return Array.from(types).sort();

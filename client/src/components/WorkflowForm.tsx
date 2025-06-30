@@ -278,7 +278,13 @@ const WorkflowForm: React.FC<WorkflowFormProps> = ({
                         Configuration (JSON)
                       </label>
                       <textarea
-                        value={JSON.stringify(task.config || {}, null, 2)}
+                        value={(() => {
+                          try {
+                            return JSON.stringify(task.config || {}, null, 2);
+                          } catch (err) {
+                            return '{}';
+                          }
+                        })()}
                         onChange={(e) => {
                           try {
                             const config = JSON.parse(e.target.value);
