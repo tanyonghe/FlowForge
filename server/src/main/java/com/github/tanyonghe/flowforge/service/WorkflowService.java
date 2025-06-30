@@ -42,4 +42,12 @@ public class WorkflowService {
         // This will be implemented in the next step
         return Map.of("status", "pending", "message", "Workflow execution not yet implemented");
     }
+
+    public List<Workflow> getWorkflowsByStatus(String status) {
+        return workflowRepository.findByStatus(status);
+    }
+
+    public List<Workflow> getWorkflowsByCreator(String creator) {
+        return workflowRepository.findByCreatedBy(creator);
+    }
 } 

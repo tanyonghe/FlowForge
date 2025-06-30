@@ -14,6 +14,7 @@ public class Workflow {
     private String name;
     private String description;
     private String createdBy;
+    private String status = "DRAFT"; // Default status
     private List<Task> tasks;
     private Map<String, Object> metadata;
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/workflows")
+@RequestMapping("/api/workflows")
 @RequiredArgsConstructor
 public class WorkflowController {
     private final WorkflowService workflowService;
@@ -31,6 +31,16 @@ public class WorkflowController {
             .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Workflow>> getWorkflowsByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(workflowService.getWorkflowsByStatus(status));
+    }
+
+    @GetMapping("/creator/{creator}")
+    public ResponseEntity<List<Workflow>> getWorkflowsByCreator(@PathVariable String creator) {
+        return ResponseEntity.ok(workflowService.getWorkflowsByCreator(creator));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Workflow> updateWorkflow(@PathVariable String id, @RequestBody Workflow workflow) {
         return ResponseEntity.ok(workflowService.updateWorkflow(id, workflow));
@@ -46,6 +56,10 @@ public class WorkflowController {
     public ResponseEntity<Map<String, Object>> executeWorkflow(
             @PathVariable String id,
             @RequestBody Map<String, Object> input) {
-        return ResponseEntity.ok(workflowService.executeWorkflow(id, input));
+        try {
+            return ResponseEntity.ok(workflowService.executeWorkflow(id, input));
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 } 

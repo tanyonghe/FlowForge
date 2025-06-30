@@ -51,8 +51,11 @@ public class AuthController {
     }
     
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<User> getCurrentUser(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         try {
+            if (authHeader == null || authHeader.isEmpty()) {
+                return ResponseEntity.status(401).build();
+            }
             String token = authHeader.replace("Bearer ", "");
             User user = authService.getCurrentUser(token);
             // Don't return password
