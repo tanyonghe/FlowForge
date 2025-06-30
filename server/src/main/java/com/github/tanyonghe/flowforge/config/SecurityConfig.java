@@ -30,9 +30,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/workflows/**").permitAll()
                 .requestMatchers("/api/task-templates/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
                 // Protected endpoints (add these when you want to secure them)
                 // .requestMatchers("/api/workflows/**").authenticated()
                 // .requestMatchers("/api/task-templates/**").authenticated()
+                // .requestMatchers("/api/users/**").authenticated()
                 .anyRequest().permitAll()
             );
         

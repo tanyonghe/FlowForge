@@ -15,6 +15,9 @@ import java.util.Optional;
 public class AuthService {
     
     @Autowired
+    private UserService userService;
+    
+    @Autowired
     private UserRepository userRepository;
     
     @Autowired
@@ -44,8 +47,7 @@ public class AuthService {
         }
         
         // Update last login
-        user.setLastLoginAt(LocalDateTime.now());
-        userRepository.save(user);
+        userService.updateLastLogin(user.getUsername());
         
         // Generate tokens
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
@@ -82,7 +84,7 @@ public class AuthService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         
-        userRepository.save(user);
+        userService.createUser(user);
         
         // Generate tokens
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
@@ -128,7 +130,7 @@ public class AuthService {
     
     public User getCurrentUser(String token) {
         String username = jwtUtil.extractUsername(token);
-        return userRepository.findByUsername(username)
+        return userService.getUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 } 
