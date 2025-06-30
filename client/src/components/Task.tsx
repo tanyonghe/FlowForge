@@ -1,13 +1,13 @@
 import React from 'react';
-import { WorkflowStep as WorkflowStepType } from '../types/workflow';
+import { Task as TaskType } from '../types/workflow';
 
-interface WorkflowStepProps {
-  step: WorkflowStepType;
+interface TaskProps {
+  task: TaskType;
   index: number;
 }
 
-const WorkflowStep: React.FC<WorkflowStepProps> = ({ step, index }) => {
-  const getStepIcon = (type: string) => {
+const Task: React.FC<TaskProps> = ({ task, index }) => {
+  const getTaskIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case 'start':
         return '🚀';
@@ -22,7 +22,7 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ step, index }) => {
     }
   };
 
-  const getStepColor = (type: string) => {
+  const getTaskColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'start':
         return 'bg-green-100 border-green-300';
@@ -38,13 +38,13 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ step, index }) => {
   };
 
   return (
-    <div className={`p-4 border rounded-lg mb-4 ${getStepColor(step.type)}`}>
+    <div className={`p-4 border rounded-lg mb-4 ${getTaskColor(task.type)}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
-          <span className="text-2xl">{getStepIcon(step.type)}</span>
+          <span className="text-2xl">{getTaskIcon(task.type)}</span>
           <div>
-            <h3 className="font-semibold text-gray-800">{step.name}</h3>
-            <p className="text-sm text-gray-600">Step {index + 1} • {step.type}</p>
+            <h3 className="font-semibold text-gray-800">{task.name}</h3>
+            <p className="text-sm text-gray-600">Task {index + 1} • {task.type}</p>
           </div>
         </div>
         <span className="text-xs bg-white px-2 py-1 rounded-full text-gray-600">
@@ -52,40 +52,57 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ step, index }) => {
         </span>
       </div>
 
-      {step.config && Object.keys(step.config).length > 0 && (
+      {task.config && Object.keys(task.config).length > 0 && (
         <div className="mb-3">
           <h4 className="text-sm font-medium text-gray-700 mb-1">Configuration:</h4>
           <div className="bg-white p-2 rounded text-sm">
             <pre className="text-xs text-gray-600 overflow-x-auto">
-              {JSON.stringify(step.config, null, 2)}
+              {JSON.stringify(task.config, null, 2)}
             </pre>
           </div>
         </div>
       )}
 
-      {step.nextSteps && step.nextSteps.length > 0 && (
+      {task.nextTasks && task.nextTasks.length > 0 && (
         <div className="mb-3">
-          <h4 className="text-sm font-medium text-gray-700 mb-1">Next Steps:</h4>
+          <h4 className="text-sm font-medium text-gray-700 mb-1">Next Tasks:</h4>
           <div className="flex flex-wrap gap-1">
-            {step.nextSteps.map((nextStep, idx) => (
+            {task.nextTasks.map((nextTask, idx) => (
               <span
                 key={idx}
                 className="bg-white px-2 py-1 rounded text-xs text-gray-600 border"
               >
-                {nextStep}
+                {nextTask}
               </span>
             ))}
           </div>
         </div>
       )}
 
-      {step.conditions && Object.keys(step.conditions).length > 0 && (
-        <div>
+      {task.conditions && Object.keys(task.conditions).length > 0 && (
+        <div className="mb-3">
           <h4 className="text-sm font-medium text-gray-700 mb-1">Conditions:</h4>
           <div className="bg-white p-2 rounded text-sm">
             <pre className="text-xs text-gray-600 overflow-x-auto">
-              {JSON.stringify(step.conditions, null, 2)}
+              {JSON.stringify(task.conditions, null, 2)}
             </pre>
+          </div>
+        </div>
+      )}
+
+      {task.templateBased && (
+        <div className="mb-3">
+          <h4 className="text-sm font-medium text-gray-700 mb-1">Template Info:</h4>
+          <div className="bg-white p-2 rounded text-sm">
+            <p className="text-xs text-gray-600">Template ID: {task.templateId}</p>
+            {task.parameters && Object.keys(task.parameters).length > 0 && (
+              <div className="mt-1">
+                <p className="text-xs text-gray-600">Parameters:</p>
+                <pre className="text-xs text-gray-600 overflow-x-auto">
+                  {JSON.stringify(task.parameters, null, 2)}
+                </pre>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -93,4 +110,4 @@ const WorkflowStep: React.FC<WorkflowStepProps> = ({ step, index }) => {
   );
 };
 
-export default WorkflowStep; 
+export default Task; 
